@@ -1,17 +1,30 @@
 {
   "name": "ember-web-workers",
   "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "description": "Service to communicate your application with browser web workers",
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "service",
+    "workers",
+    "web-worker",
+    "web"
   ],
   "license": "MIT",
-  "author": "",
+  "author": "BBVAEngineering",
   "directories": {
     "doc": "doc",
     "test": "tests"
   },
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:BBVAEngineering/ember-web-workers.git"
+  },
+  "maintainers": [
+    {
+      "name": "josex2r",
+      "email": "codex2r@gmail.com"
+    }
+  ],
   "scripts": {
     "build": "ember build",
     "start": "ember server",
