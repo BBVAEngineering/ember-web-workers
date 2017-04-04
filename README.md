@@ -1,4 +1,4 @@
-# ember-web-workers
+# ember-web-workers [![Build Status](https://circleci.com/gh/BBVAEngineering/ember-web-workers.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/BBVAEngineering/ember-web-workers) [![GitHub version](https://badge.fury.io/gh/BBVAEngineering%2Fember-web-workers.svg)](https://badge.fury.io/gh/BBVAEngineering%2Fember-web-workers) [![Dependency Status](https://david-dm.org/BBVAEngineering/ember-web-workers.svg)](https://david-dm.org/BBVAEngineering/ember-wait-for-render)
 
 Service to communicate your application with browser web workers.
 
