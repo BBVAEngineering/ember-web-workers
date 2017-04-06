@@ -6,7 +6,7 @@ This addon can be installed with `ember-cli`:
 
 * `ember install ember-web-workers`
 
-![ember-web-workers](http://i.imgur.com/VVOmiQE.gif)
+![ember-web-workers](http://i.imgur.com/93lfb8t.gif)
 
 ## Usage
 
@@ -136,7 +136,6 @@ to send `1..n` messages until terminates.
     * `postMessage`: Alias to send a message to the worker.
     * `terminate`: Close the connection and terminate the worker
 
-
 ```javascript
 // Some Ember context.
 
@@ -148,12 +147,15 @@ function callback(data) {
   foo() {
     const worker = this.get('worker');
 
-    return worker.on('test', callback).then(() => {
-        // Worker has been created.
-        // Terminate it after 5 seconds.
-        setTimeout(() => {
-          worker.off('test', callback);
-        }, 5000);
+    return worker.open('test').then((stream) => {
+        const data1 = stream.send({ foo: 'foo' });
+        const data2 = stream.send({ bar: 'bar' });
+        
+        return Ember.RSVP.all([data1, data2]).then(() => {
+          stream.terminate;
+
+          return data1.foo + data2.bar;
+        });
       }, (error) => {
         // Worker error, it has been terminated.
       });
