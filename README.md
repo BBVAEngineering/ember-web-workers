@@ -18,15 +18,20 @@ This addon can be installed with `ember-cli`:
 // Wait for the initial message event.
 self.addEventListener('message', function(e) {
   var data = e.data;
-
-  // Ping the Ember service to say that everything is ok.
-  postMessage(true);
+  var port = e.ports[0];
 
   // Do your stuff here.
-  setTimeout(function() {
-    	postMessage({ foo: 'foo', bar: 'bar' });
-  }, 100);
+  if (port) {
+    // Message sended throught a worker created with 'open' method.
+    port.postMessage({ foo: 'foo' });
+  } else {
+    // Message sended throught a worker created with 'send' or 'on' method.
+    postMessage({ bar: 'bar' });
+  }
 }, false);
+
+// Ping the Ember service to say that everything is ok.
+postMessage(true);
 ```
 
 * Import the service in your application:
@@ -40,9 +45,9 @@ self.addEventListener('message', function(e) {
 
 * Use the methods to communicate with the web worker:
 
-#### `send`
+#### `postMessage`
 
-Method used to make a request and wait for some response. This method
+Method used to make a request and wait for a response. This method
 returns a promise that will be resolved after the worker responses.
 
 When promise resolves the worker will be terminated.
@@ -55,8 +60,8 @@ When promise resolves the worker will be terminated.
 // Some Ember context.
 {
   foo() {
-    return this.get('worker').send('test', { foo: 'bar' }).then((response) => {
-        // response => { foo: 'foo', bar: 'bar' }
+    return this.get('worker').postMessage('test', { foo: 'bar' }).then((response) => {
+        // response => { bar: 'bar' }
       }, (error) => {
         // error contains the message thrown by the worker.
       });
@@ -64,12 +69,12 @@ When promise resolves the worker will be terminated.
 }
 ```
 
-#### `cancel`
+#### `terminate`
 
-With this method a pending promise can be cancelled, this will kill the worker and the promise will be rejected.
-When promise resolves the worker will be terminated.
+Using this method a pending promise can be cancelled, this will terminate the worker 
+associated and the promise will be rejected.
 
-If promise is not provided, it will kill all the workers.
+If promise is not provided, it will kill all the active workers.
 
 **Arguments**:
     * `promise`: the promise returned by the `send` function (optional).
@@ -79,7 +84,7 @@ If promise is not provided, it will kill all the workers.
 {
   foo() {
     const worker = this.get('worker');
-    const promise = worker.send('test', { foo: 'bar' });
+    const promise = worker.postMessage('test', { foo: 'bar' });
     
     worker.cancel(promise);
   }
@@ -88,12 +93,11 @@ If promise is not provided, it will kill all the workers.
 
 #### `on`/`off`
 
-Methods used to subscribe to a worker.
+Methods used to subscribe to a worker events.
 The worker will be alive until the event is detached.
 
 **Arguments**:
     * `worker`: the name of the worker to create (used to create the file path `dist/assets/web-workers/${name}.js`).
-    * `data`: transferable object (`true` will be ignored, def. for ping).
     * `callback`: callback to be executed each time worker sends a message (`postMessage`).
 
 ```javascript
@@ -107,7 +111,7 @@ function callback(data) {
   foo() {
     const worker = this.get('worker');
 
-    return worker.send('test', {}, callback).then(() => {
+    return worker.on('test', callback).then(() => {
         // Worker has been created.
         // Terminate it after 5 seconds.
         setTimeout(() => {
@@ -119,6 +123,42 @@ function callback(data) {
   }
 }
 ```
+
+#### `open`
+
+This method creates a new worker and stablish a communication allowing to keep it alive
+to send `1..n` messages until terminates.
+
+**Arguments**:
+    * `worker`: the name of the worker to create (used to create the file path `dist/assets/web-workers/${name}.js`).
+
+**Promise argument** (object):
+    * `postMessage`: Alias to send a message to the worker.
+    * `terminate`: Close the connection and terminate the worker
+
+
+```javascript
+// Some Ember context.
+
+function callback(data) {
+  console.log(data.foo, data.bar); // 'foo bar'
+}
+
+{
+  foo() {
+    const worker = this.get('worker');
+
+    return worker.on('test', callback).then(() => {
+        // Worker has been created.
+        // Terminate it after 5 seconds.
+        setTimeout(() => {
+          worker.off('test', callback);
+        }, 5000);
+      }, (error) => {
+        // Worker error, it has been terminated.
+      });
+  }
+}
 
 ## Installation
 

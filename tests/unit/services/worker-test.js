@@ -9,6 +9,7 @@ const { RSVP: { hash } } = Ember;
 // const DELAY = 50;
 let service;
 const Worker = window.Worker;
+const testData = { foo: 'foo' };
 
 moduleFor('service:worker', 'Unit | Service | worker', {
 	beforeEach() {
@@ -17,7 +18,7 @@ moduleFor('service:worker', 'Unit | Service | worker', {
     });
 	},
   afterEach() {
-    service.cancel();
+    service.terminate();
   }
 });
 
@@ -31,58 +32,54 @@ test('its enabled if worker exists', (assert) => {
 });
 
 test('it rejects promise if worker does not exist', (assert) => {
-  return service.send('fail').catch(() => {
+  return service.postMessage('fail').catch(() => {
     assert.ok(1);
     assert.equal(service.get('_cache.length'), 0);
   });
 });
 
 test('it resolves promise if worker exist', (assert) => {
-  return service.send('no-delay').then((data) => {
-    assert.equal(data.name, 'no-delay');
-    assert.equal(data.bar, 'bar');
+  return service.postMessage('response', testData).then((data) => {
+    assert.deepEqual(data, testData);
     assert.equal(service.get('_cache.length'), 0);
   });
 });
 
 test('it resolves delayed response', (assert) => {
-  return service.send('delayed').then((data) => {
-    assert.equal(data.name, 'delayed');
-    assert.equal(data.bar, 'bar');
+  return service.postMessage('delayed-response', testData).then((data) => {
+    assert.deepEqual(data, testData);
     assert.equal(service.get('_cache.length'), 0);
   });
 });
 
 test('it rejects promise if worker throws an error', (assert) => {
-  return service.send('error').catch((error) => {
+  return service.postMessage('error').catch((error) => {
     assert.equal(error, 'Uncaught Error: foo');
     assert.equal(service.get('_cache.length'), 0);
   });
 });
 
 test('it resolves simultaneous requests', (assert) => {
-  assert.expect(6);
+  assert.expect(4);
 
-  const delayedPromise = service.send('delayed');
-  const promise = service.send('no-delay').then((data) => {
+  const delayedPromise = service.postMessage('delayed-response', testData);
+  const promise = service.postMessage('response', testData).then((data) => {
     // Check pending delayed promise
     assert.equal(service.get('_cache.length'), 1);
 
     return data;
   });
 
-  return hash({ promise, delayedPromise }).then(({ promise, delayedPromise }) => {
-    assert.equal(promise.name, 'no-delay');
-    assert.equal(promise.bar, 'bar');
-    assert.equal(delayedPromise.name, 'delayed');
-    assert.equal(delayedPromise.bar, 'bar');
+  return hash({ promise, delayedPromise }).then((data) => {
+    assert.deepEqual(data.promise, testData);
+    assert.deepEqual(data.delayedPromise, testData);
     assert.equal(service.get('_cache.length'), 0);
   });
 });
 
-test('it can cancel a pending promise', (assert) => {
+test('it can terminate a pending promise', (assert) => {
   const done = assert.async();
-  const promise = service.send('delayed');
+  const promise = service.postMessage('delayed-response');
 
   promise.then(() => {
     assert.ok(0);
@@ -90,28 +87,37 @@ test('it can cancel a pending promise', (assert) => {
     assert.equal(service.get('_cache.length'), 0);
   }).finally(done);
 
-  service.cancel(promise);
+  service.terminate(promise);
 });
 
-test('it can cancel all promises', (assert) => {
-  service.send('no-response');
-  service.send('no-response');
-  service.send('no-response');
+test('it can terminate all promises', (assert) => {
+  service.postMessage('no-response');
+  service.postMessage('no-response');
+  service.postMessage('no-response');
 
   assert.equal(service.get('_cache.length'), 3);
 
-  service.cancel();
+  service.terminate();
 
   assert.equal(service.get('_cache.length'), 0);
 });
 
 test('it resolves promise when event starts', (assert) => {
-  return service.on('subscription', {}, () => {}).then(() => {
+  return service.on('subscription', () => {}).then(() => {
     assert.equal(service.get('_cache.length'), 1);
   });
 });
 
 test('it subscribes to a worker', (assert) => {
+  const callback = () => {};
+
+  return service.on('subscription', callback).then(() => {
+    assert.equal(service.get('_cache.length'), 1);
+    service.off('subscription', callback);
+  });
+});
+
+test('it executes callback when receives data', (assert) => {
   assert.expect(4);
 
   let count = 0;
@@ -126,15 +132,17 @@ test('it subscribes to a worker', (assert) => {
     }
   };
 
-  service.on('subscription', {}, callback).then(() => {
+  service.on('subscription', callback).then(() => {
     assert.equal(service.get('_cache.length'), 1);
   });
 });
 
 test('it resolves promise when event stops', (assert) => {
+  assert.expect(2);
+
   const callback = () => {};
 
-  return service.on('subscription', {}, callback).then(() => {
+  return service.on('subscription', callback).then(() => {
     assert.equal(service.get('_cache.length'), 1);
 
     return service.off('subscription', callback).then(() => {
@@ -143,18 +151,43 @@ test('it resolves promise when event stops', (assert) => {
   });
 });
 
-test('it unsubscribes to a worker', (assert) => {
+test('it unsubscribes from a worker', (assert) => {
   assert.expect(2);
 
   const callback = () => {};
-
-  service.on('subscription', {}, callback);
+  const subscriptionPromise = service.on('subscription', callback);
 
   assert.equal(service.get('_cache.length'), 1);
 
-  const promise = service.off('subscription', callback);
+  return subscriptionPromise.then(() => {
+    return service.off('subscription', callback).then(() => {
+      assert.equal(service.get('_cache.length'), 0);
+    });
+  });
+});
 
-  return promise.then(() => {
-    assert.equal(service.get('_cache.length'), 0);
+test('it can start a worker', (assert) => {
+  return service.open('increment').then((worker) => {
+    assert.equal(service.get('_cache.length'), 1);
+    assert.equal(typeof worker, 'object');
+    assert.equal(typeof worker.postMessage, 'function');
+    assert.equal(typeof worker.terminate, 'function');
+    worker.terminate();
+  });
+});
+
+test('it can send/receive messages from an active connection', (assert) => {
+  return service.open('increment').then((worker) => {
+    assert.equal(service.get('_cache.length'), 1);
+
+    return worker.postMessage({ index: 0 }).then((data) => {
+      assert.equal(data.index, 1);
+
+      return worker.postMessage({ index: 1 }).then((data) => {
+        assert.equal(data.index, 2);
+
+        worker.terminate();
+      });
+    });
   });
 });

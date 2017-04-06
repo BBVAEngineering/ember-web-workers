@@ -1,8 +1,3 @@
-/**
- * @module buzz-core
- * @module buzz-core-services
- */
-
 import Ember from 'ember';
 
 const { get, assert, A, RSVP, Evented, computed, Service, on, isPresent } = Ember;
@@ -12,18 +7,23 @@ function messageListener(meta, event) {
   // Check if the worker has been instantiated via event listener:
   // worker.on('name', data, callback);
   if (get(meta, 'keepAlive')) {
+    const callback = get(meta, 'callback');
+
     if (ping) {
       // A 'true' message tell us that the worker has been created correctly,
       // then resolve the promise returned by the event listener.
       this.trigger('resolve', meta);
-    } else {
+    } else if (callback) {
       // The worker is sending data, call the callback this the event data.
-      get(meta, 'callback')(event.data);
+      callback(event.data);
+    } else {
+      // Receiving data from a worker created via 'open'.
+      this.trigger('resolve', meta, event.data);
     }
   // If the response is equals to 'true' we should ignore it because
   // the worker is pinging us to tell that everything is correct.
   } else if (!ping) {
-    // Resolve the promise returned by the method 'send' with the event data.
+    // Resolve the promise returned by the method 'postMessage' with the event data.
     this.trigger('resolve', meta, event.data);
   }
 }
@@ -70,11 +70,10 @@ export default Service.extend(Evented, {
    * @param Function callback
    * @return Object
 	 */
-	_wakeUp(name, callback) {
+	_wakeUp(name, callback, keepAlive = false) {
     assert('You must provide the worker name', isPresent(name));
 
     // 'keepAlive' will store if the worker should still alive after sending a message.
-    const keepAlive = typeof callback === 'function';
     const worker = new window.Worker(`${this.get('webWorkersPath')}${name}.js`);
 		const deferred = RSVP.defer('Worker: sending message');
     const meta = {
@@ -142,10 +141,10 @@ export default Service.extend(Evented, {
   /**
 	 * Cancel pending promise.
 	 *
-	 * @method cancel
+	 * @method terminate
    * @param Ember.RSVP promise
    */
-  cancel(promise) {
+  terminate(promise) {
 		const _cache = this.get('_cache');
     let index = _cache.length;
 
@@ -162,17 +161,17 @@ export default Service.extend(Evented, {
 	},
 
 	/**
-	 * Send event to the worker.
+	 * Send event to the worker and terminate it when responses.
 	 *
-	 * @method send
+	 * @method postMessage
    * @param String name
    * @param Object data
 	 * @return Mixed
 	 */
-	send(name, data) {
+	postMessage(name, data) {
 		assert('Workers are disabled', this.get('isEnabled'));
 
-		const meta = this._wakeUp(name);
+    const meta = this._wakeUp(name);
 
     this.get('_cache').pushObject(meta);
 		get(meta, 'worker').postMessage(data);
@@ -188,13 +187,12 @@ export default Service.extend(Evented, {
    * @param Object data
    * @param Function callback
 	 */
-  on(name, data, callback) {
+  on(name, callback) {
     assert('Cannot register an event with no callback', typeof callback === 'function');
 
-    const meta = this._wakeUp(name, callback);
+    const meta = this._wakeUp(name, callback, true);
 
-    this.get('_cache').pushObject(meta, callback);
-		get(meta, 'worker').postMessage(data);
+    this.get('_cache').pushObject(meta);
 
 		return get(meta, 'deferred.promise');
   },
@@ -212,14 +210,41 @@ export default Service.extend(Evented, {
     const meta = this.get('_cache').find((meta) => ( name === meta.name && callback === meta.callback ));
 
     if (meta) {
-      const deferred = get(meta, 'deferred');
-
       this._cleanMeta(meta);
-      deferred.resolve();
 
-      return deferred.promise;
+      return RSVP.resolve();
     }
 
-    return Ember.RSVP.reject('Worker: event does not exist');
+    return RSVP.reject('Worker: event does not exist');
+  },
+
+	/**
+	 * Start a worker.
+	 *
+	 * @method open
+   * @param String name
+	 */
+  open(name) {
+    const meta = this._wakeUp(name, null, true);
+    const promise = get(meta, 'deferred.promise').then(() => ({
+      postMessage: (data) => {
+        const deferred = RSVP.defer();
+        const channel = new MessageChannel();
+
+        channel.port2.onmessage = (e) => deferred.resolve(e.data);
+        get(meta, 'worker').postMessage(data, [channel.port1]);
+
+        return deferred.promise;
+      },
+      terminate: () => {
+        this._cleanMeta(meta);
+        return RSVP.resolve();
+      }
+    }));
+
+    this.get('_cache').pushObject(meta);
+
+		return promise;
   }
+
 });

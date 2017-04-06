@@ -1,12 +1,7 @@
-self.addEventListener('message', function(e) {
-  var data = e.data;
-  var index = 0;
+postMessage(true);
 
-  postMessage(true);
-
-  setInterval(function() {
-    postMessage({ name: 'subscription', index: index });
-    index++;
-  }, 100);
-}, false);
-
+var index = 0;
+setInterval(function() {
+  postMessage({ index: index });
+  index++;
+}, 500);
