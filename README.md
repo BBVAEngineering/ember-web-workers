@@ -139,10 +139,6 @@ to send `1..n` messages until terminates.
 ```javascript
 // Some Ember context.
 
-function callback(data) {
-  console.log(data.foo, data.bar); // 'foo bar'
-}
-
 {
   foo() {
     const worker = this.get('worker');
@@ -151,9 +147,12 @@ function callback(data) {
         const data1 = stream.send({ foo: 'foo' });
         const data2 = stream.send({ bar: 'bar' });
         
+        // Wait responses.
         return Ember.RSVP.all([data1, data2]).then(() => {
-          stream.terminate;
+          // Kill the worker.
+          stream.terminate();
 
+          // Do something with the worker responses.
           return data1.foo + data2.bar;
         });
       }, (error) => {
@@ -161,6 +160,31 @@ function callback(data) {
       });
   }
 }
+```
+
+#### Handling errors
+
+To reject the promise an error must be thrown inside the worker:
+
+```javascript
+// Worker context.
+
+throw new Error('foo');
+
+```
+
+```javascript
+
+// Some Ember context.
+
+{
+  foo() {
+    return this.get('worker').postMessage('test').catch((error) => {
+        console.error(error); // Unhandled error: foo
+      });
+  }
+}
+```
 
 ## Installation
 
