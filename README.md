@@ -86,7 +86,7 @@ If promise is not provided, it will kill all the active workers.
     const worker = this.get('worker');
     const promise = worker.postMessage('test', { foo: 'bar' });
     
-    worker.cancel(promise);
+    worker.terminate(promise);
   }
 }
 ```
