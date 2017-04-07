@@ -52,9 +52,10 @@ returns a promise that will be resolved after the worker responses.
 
 When promise resolves the worker will be terminated.
 
-**Arguments**:
-    * `worker`: the name of the worker to create (used to create the file path `dist/assets/web-workers/${name}.js`).
-    * `data`: transferable object (`true` will be ignored, def. for ping).
+**Arguments**:  
+
+  * `worker`: the name of the worker to create (used to create the file path `dist/assets/web-workers/${name}.js`).
+  * `data`: transferable object (`true` will be ignored, def. for ping).
 
 ```javascript
 // Some Ember context.
@@ -76,8 +77,9 @@ associated and the promise will be rejected.
 
 If promise is not provided, it will kill all the active workers.
 
-**Arguments**:
-    * `promise`: the promise returned by the `send` function (optional).
+**Arguments**:  
+
+  * `promise`: the promise returned by the `send` function (optional).
 
 ```javascript
 // Some Ember context.
@@ -96,9 +98,10 @@ If promise is not provided, it will kill all the active workers.
 Methods used to subscribe to a worker events.
 The worker will be alive until the event is detached.
 
-**Arguments**:
-    * `worker`: the name of the worker to create (used to create the file path `dist/assets/web-workers/${name}.js`).
-    * `callback`: callback to be executed each time worker sends a message (`postMessage`).
+**Arguments**:  
+
+  * `worker`: the name of the worker to create (used to create the file path `dist/assets/web-workers/${name}.js`).
+  * `callback`: callback to be executed each time worker sends a message (`postMessage`).
 
 ```javascript
 // Some Ember context.
@@ -129,12 +132,14 @@ function callback(data) {
 This method creates a new worker and stablish a communication allowing to keep it alive
 to send `1..n` messages until terminates.
 
-**Arguments**:
-    * `worker`: the name of the worker to create (used to create the file path `dist/assets/web-workers/${name}.js`).
+**Arguments**:  
 
-**Promise argument** (object):
-    * `postMessage`: Alias to send a message to the worker.
-    * `terminate`: Close the connection and terminate the worker
+  * `worker`: the name of the worker to create (used to create the file path `dist/assets/web-workers/${name}.js`).
+
+**Promise argument** (object):  
+
+  * `postMessage`: Alias to send a message to the worker.
+  * `terminate`: Close the connection and terminate the worker
 
 ```javascript
 // Some Ember context.
