@@ -49,7 +49,7 @@ export default Service.extend(Evented, {
 	 * @property webWorkersPath
 	 * @type String
 	 */
-	webWorkersPath: 'assets/web-workers/',
+	webWorkersPath: '/assets/web-workers/',
 
   /**
 	 * Initialize metadata array.
