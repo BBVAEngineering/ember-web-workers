@@ -5,7 +5,7 @@ const { get, assert, A, RSVP, Evented, computed, Service, on, isPresent } = Embe
 function messageListener(meta, event) {
   const ping = event.data === true;
   // Check if the worker has been instantiated via event listener:
-  // worker.on('name', data, callback);
+  // worker.on('url', data, callback);
   if (get(meta, 'keepAlive')) {
     const callback = get(meta, 'callback');
 
@@ -44,14 +44,6 @@ export default Service.extend(Evented, {
 	isEnabled: computed(() => Boolean(window.Worker)),
 
   /**
-	 * Static workers file path.
-	 *
-	 * @property webWorkersPath
-	 * @type String
-	 */
-	webWorkersPath: 'assets/web-workers/',
-
-  /**
 	 * Initialize metadata array.
 	 *
 	 * @method init
@@ -63,23 +55,23 @@ export default Service.extend(Evented, {
   },
 
   /**
-	 * Start a worker and attach the events given a name.
+	 * Start a worker and attach the events given a url.
 	 *
 	 * @method _wakeup
-   * @param String name
+   * @param String url
    * @param Function callback
    * @return Object
 	 */
-	_wakeUp(name, callback, keepAlive = false) {
-    assert('You must provide the worker name', isPresent(name));
+	_wakeUp(url, callback, keepAlive = false) {
+    assert('You must provide the worker url', isPresent(url));
 
     // 'keepAlive' will store if the worker should still alive after sending a message.
-    const worker = new window.Worker(`${this.get('webWorkersPath')}${name}.js`);
+    const worker = new window.Worker(url);
 		const deferred = RSVP.defer('Worker: sending message');
     const meta = {
       keepAlive,
       worker,
-      name,
+      url,
       deferred,
       callback
     };
@@ -164,14 +156,14 @@ export default Service.extend(Evented, {
 	 * Send event to the worker and terminate it when responses.
 	 *
 	 * @method postMessage
-   * @param String name
+   * @param String url
    * @param Object data
 	 * @return Mixed
 	 */
-	postMessage(name, data) {
+	postMessage(url, data) {
 		assert('Workers are disabled', this.get('isEnabled'));
 
-    const meta = this._wakeUp(name);
+    const meta = this._wakeUp(url);
 
     this.get('_cache').pushObject(meta);
 		get(meta, 'worker').postMessage(data);
@@ -183,14 +175,14 @@ export default Service.extend(Evented, {
 	 * Suscribe to a worker.
 	 *
 	 * @method on
-   * @param String name
+   * @param String url
    * @param Object data
    * @param Function callback
 	 */
-  on(name, callback) {
+  on(url, callback) {
     assert('Cannot register an event with no callback', typeof callback === 'function');
 
-    const meta = this._wakeUp(name, callback, true);
+    const meta = this._wakeUp(url, callback, true);
 
     this.get('_cache').pushObject(meta);
 
@@ -201,13 +193,13 @@ export default Service.extend(Evented, {
 	 * Suscribe to a worker.
 	 *
 	 * @method off
-   * @param String name
+   * @param String url
    * @param Function callback
 	 */
-  off(name, callback) {
+  off(url, callback) {
     assert('Cannot unregister an event with no callback', typeof callback === 'function');
 
-    const meta = this.get('_cache').find((meta) => ( name === meta.name && callback === meta.callback ));
+    const meta = this.get('_cache').find((meta) => ( url === meta.url && callback === meta.callback ));
 
     if (meta) {
       this._cleanMeta(meta);
@@ -222,10 +214,10 @@ export default Service.extend(Evented, {
 	 * Start a worker.
 	 *
 	 * @method open
-   * @param String name
+   * @param String url
 	 */
-  open(name) {
-    const meta = this._wakeUp(name, null, true);
+  open(url) {
+    const meta = this._wakeUp(url, null, true);
     const promise = get(meta, 'deferred.promise').then(() => ({
       postMessage: (data) => {
         const deferred = RSVP.defer();
