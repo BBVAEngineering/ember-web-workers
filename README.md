@@ -33,6 +33,18 @@ self.addEventListener('message', function(e) {
 // Ping the Ember service to say that everything is ok.
 postMessage(true);
 ```
+* Depending on your setup, you might need to exclude the web-workers
+directory from being fingerprinted. An example of doing that:
+
+```javascript
+// ember-cli-build.js
+  let app = new EmberApp(defaults, {
+  	fingerprint: {
+          enabled: true,
+          exclude: ['assets/web-workers']
+  	}
+  });
+```
 
 * Import the service in your application:
 
