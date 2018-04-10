@@ -1,22 +1,28 @@
 ---
 language: node_js
 node_js:
-  - "4"
+  - "stable"
 
 sudo: false
+dist: trusty
+
+addons:
+  chrome: stable
 
 cache:
   directories:
-    - $HOME/.npm
-    - $HOME/.cache # includes bowers cache
+    - $HOME/.yarn-cache
+    - $HOME/.cache  # includes bowers cache
 
 env:
-  # we recommend testing LTS's and latest stable release (bonus points to beta/canary)
+  # we recommend testing LTS's and latest
+  #  stable release (bonus points to beta/canary)
   - EMBER_TRY_SCENARIO=ember-lts-2.4
   - EMBER_TRY_SCENARIO=ember-lts-2.8
   - EMBER_TRY_SCENARIO=ember-release
   - EMBER_TRY_SCENARIO=ember-beta
   - EMBER_TRY_SCENARIO=ember-canary
+  - EMBER_TRY_SCENARIO=ember-default
 
 matrix:
   fast_finish: true
@@ -25,17 +31,21 @@ matrix:
 
 before_install:
   - npm config set spin false
-  - npm install -g bower phantomjs-prebuilt
+  - npm install -g npm@4
+  - npm i -g bower
+  - npm --version
   - bower --version
-  - phantomjs --version
 
 install:
   - npm install
   - bower install
 
+before_script:
+  - sudo chown root /opt/google/chrome/chrome-sandbox
+  - sudo chmod 4755 /opt/google/chrome/chrome-sandbox
+
 script:
   # Usually, it's ok to finish the test scenario without reverting
   #  to the addon's original dependency state, skipping "cleanup".
-  - node_modules/.bin/check-dependencies
   - node_modules/.bin/eslint '**/*.js'
   - node_modules/.bin/ember try:one $EMBER_TRY_SCENARIO test --skip-cleanup

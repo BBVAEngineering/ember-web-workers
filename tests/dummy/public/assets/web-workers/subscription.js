@@ -1,6 +1,6 @@
 postMessage(true);
 
-var index = 0;
+let index = 0;
 setInterval(function() {
   postMessage({ index: index });
   index++;
