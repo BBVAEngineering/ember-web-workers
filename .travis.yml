@@ -11,14 +11,14 @@ addons:
 
 cache:
   directories:
-    - $HOME/.yarn-cache
+    - $HOME/.npm
     - $HOME/.cache  # includes bowers cache
 
 env:
-  # we recommend testing LTS's and latest
-  #  stable release (bonus points to beta/canary)
-  - EMBER_TRY_SCENARIO=ember-lts-2.4
-  - EMBER_TRY_SCENARIO=ember-lts-2.8
+  # we recommend new addons test the current and previous LTS
+  # as well as latest stable release (bonus points to beta/canary)
+  - EMBER_TRY_SCENARIO=ember-lts-2.12
+  - EMBER_TRY_SCENARIO=ember-lts-2.16
   - EMBER_TRY_SCENARIO=ember-release
   - EMBER_TRY_SCENARIO=ember-beta
   - EMBER_TRY_SCENARIO=ember-canary
@@ -31,14 +31,11 @@ matrix:
 
 before_install:
   - npm config set spin false
-  - npm install -g npm@4
-  - npm i -g bower
+  - npm install -g npm@5
   - npm --version
-  - bower --version
 
 install:
   - npm install
-  - bower install
 
 before_script:
   - sudo chown root /opt/google/chrome/chrome-sandbox
@@ -48,4 +45,4 @@ script:
   # Usually, it's ok to finish the test scenario without reverting
   #  to the addon's original dependency state, skipping "cleanup".
   - node_modules/.bin/eslint '**/*.js'
-  - node_modules/.bin/ember try:one $EMBER_TRY_SCENARIO test --skip-cleanup
+  - node_modules/.bin/ember try:one $EMBER_TRY_SCENARIO --skip-cleanup
