@@ -1,9 +1,9 @@
 /* eslint-disable func-style, no-magic-numbers, prefer-const */
-import Ember from 'ember';
+import RSVP from 'rsvp';
 import { moduleFor, test } from 'ember-qunit';
 
 
-const { RSVP: { hash } } = Ember;
+const { hash } = RSVP;
 // const DELAY = 50;
 let service;
 const Worker = window.Worker;
