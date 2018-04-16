@@ -98,7 +98,7 @@ export default Service.extend(Evented, {
 	   * @method _onResolve
 	 * @param Object data
 	   */
-	_onResolve: on('resolve', function (meta, data) {
+	_onResolve: on('resolve', function(meta, data) {
 		const deferred = get(meta, 'deferred');
 
 		if (!get(meta, 'keepAlive')) {
