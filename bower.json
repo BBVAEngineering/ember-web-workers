@@ -1,7 +1,0 @@
-{
-  "name": "ember-web-workers",
-  "dependencies": {
-    "ember": "1.13.13",
-    "ember-cli-shims": "0.1.3"
-  }
-}

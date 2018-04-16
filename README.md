@@ -1,4 +1,9 @@
-# ember-web-workers [![Build Status](https://circleci.com/gh/BBVAEngineering/ember-web-workers.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/BBVAEngineering/ember-web-workers) [![GitHub version](https://badge.fury.io/gh/BBVAEngineering%2Fember-web-workers.svg)](https://badge.fury.io/gh/BBVAEngineering%2Fember-web-workers) [![Dependency Status](https://david-dm.org/BBVAEngineering/ember-web-workers.svg)](https://david-dm.org/BBVAEngineering/ember-wait-for-render)
+# ember-web-workers 
+
+[![Build Status](https://circleci.com/gh/BBVAEngineering/ember-web-workers.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/BBVAEngineering/ember-web-workers)
+[![GitHub version](https://badge.fury.io/gh/BBVAEngineering%2Fember-web-workers.svg)](https://badge.fury.io/gh/BBVAEngineering%2Fember-web-workers)
+[![npm version](https://badge.fury.io/js/ember-storages.svg)](https://badge.fury.io/js/ember-web-workers)
+[![Dependency Status](https://david-dm.org/BBVAEngineering/ember-web-workers.svg)](https://david-dm.org/BBVAEngineering/ember-wait-for-render)
 
 Service to communicate your application with browser web workers.
 
@@ -7,6 +12,10 @@ This addon can be installed with `ember-cli`:
 * `ember install ember-web-workers`
 
 ![ember-web-workers](http://i.imgur.com/93lfb8t.gif)
+
+## Information
+
+[![NPM](https://nodei.co/npm/ember-web-workers.png?downloads=true&downloadRank=true)](https://nodei.co/npm/ember-web-workers/)
 
 ## Usage
 
@@ -191,28 +200,19 @@ throw new Error('foo');
 }
 ```
 
-## Installation
+## Contribute
 
-* `git clone https://github.com/BBVAEngineering/ember-web-workers.git`
-* `cd ember-web-workers`
-* `npm install`
-* `bower install`
+If you want to contribute to this addon, please read the [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## Running
+## Versioning
 
-* `ember serve`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/BBVAEngineering/ember-wait-for-render/tags).
 
-## Running Tests
 
-Use Chrome for testing (not sure if PhantomJS has web workers).
+## Authors
 
-* `npm test` (Runs `ember try:each` to test your addon against multiple Ember versions)
-* `ember test`
-* `ember test --server`
+See the list of [contributors](https://github.com/BBVAEngineering/ember-wait-for-render/graphs/contributors) who participated in this project.
 
-## Building
+## License
 
-* `ember build`
-
-For more information on using ember-cli, visit [https://ember-cli.com/](https://ember-cli.com/).
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details

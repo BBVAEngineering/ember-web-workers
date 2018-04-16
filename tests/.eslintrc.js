@@ -2,5 +2,7 @@
 'use strict';
 
 module.exports = {
-  name: 'ember-web-workers'
+	env: {
+		embertest: true
+	}
 };

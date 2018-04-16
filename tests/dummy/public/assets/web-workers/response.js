@@ -1,7 +1,5 @@
 self.addEventListener('message', function(e) {
-  var data = e.data;
-
-  postMessage(data);
+  postMessage(e.data);
 }, false);
 
 postMessage(true);
