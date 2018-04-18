@@ -110,7 +110,9 @@ The worker will be alive until the event is detached.
 **Arguments**:  
 
   * `worker`: the name of the worker to create (used to create the file path `dist/assets/web-workers/${name}.js`).
-  * `callback`: callback to be executed each time worker sends a message (`postMessage`).
+  * `callback`: callback to be executed each time worker sends a message (`postMessage`). `callback` is optional for `off` method.
+  	- If `callback` is not	passed for `off` method, then all the instantiated worker with the passed name will be terminated
+  	- If `callback` is passed, then the corresponding worker associated with the callback will only be terminated.
 
 ```javascript
 // Some Ember context.

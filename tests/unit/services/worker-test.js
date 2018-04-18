@@ -149,17 +149,46 @@ test('it resolves promise when event stops', (assert) => {
 	});
 });
 
-test('it unsubscribes from a worker', (assert) => {
+test('it unsubscribes from a worker (passing a callback)', (assert) => {
 	assert.expect(2);
 
 	const callback = () => { };
-	const subscriptionPromise = service.on('subscription', callback);
+	const callback2 = () => { };
 
-	assert.equal(service.get('_cache.length'), 1);
+	const done = assert.async();
+	const subscriptionPromise = service.on('subscription', callback);
+	const subscriptionPromise2 = service.on('subscription', callback2);
+
+	assert.equal(service.get('_cache.length'), 2);
 
 	return subscriptionPromise.then(() => {
-		return service.off('subscription', callback).then(() => {
-			assert.equal(service.get('_cache.length'), 0);
+		subscriptionPromise2.then(() => {
+			service.off('subscription', callback).then(() => {
+				assert.equal(service.get('_cache.length'), 1, 'Only the worker associated with the callback has been terminated');
+				done();
+			});
+		});
+	});
+});
+
+test('it unsubscribes from a worker (without passing a callback)', (assert) => {
+	assert.expect(2);
+
+	const callback = () => { };
+	const callback2 = () => { };
+
+	const done = assert.async();
+	const subscriptionPromise = service.on('subscription', callback);
+	const subscriptionPromise2 = service.on('subscription', callback2);
+
+	assert.equal(service.get('_cache.length'), 2);
+
+	return subscriptionPromise.then(() => {
+		subscriptionPromise2.then(() => {
+			service.off('subscription').then(() => {
+				assert.equal(service.get('_cache.length'), 0, 'All the worker of the given name has been terminated');
+				done();
+			});
 		});
 	});
 });
