@@ -1,8 +1,8 @@
-/*eslint- */
-self.addEventListener('message', function (e) {
+/* eslint- */
+self.addEventListener('message', (e) => {
 	const data = e.data;
 
-	setTimeout(function () {
+	setTimeout(() => {
 		postMessage(data);
 	}, 100);
 }, false);

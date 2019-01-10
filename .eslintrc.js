@@ -44,6 +44,8 @@ module.exports = {
 			node: true
 		},
 		plugins: ['node'],
-		rules: require('eslint-plugin-node').configs.recommended.rules
+		rules: Object.assign({}, require('eslint-plugin-node').configs.recommended.rules, {
+			'no-process-env': 0
+		})
 	}]
 };

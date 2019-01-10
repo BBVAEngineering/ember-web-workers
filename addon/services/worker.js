@@ -12,15 +12,15 @@ function messageListener(meta, event) {
 	// Check if the worker has been instantiated via event listener:
 	// worker.on('name', data, callback);
 	if (get(meta, 'keepAlive')) {
-		const callback = get(meta, 'callback');
+		const fn = get(meta, 'callback');
 
 		if (ping) {
 			// A 'true' message tell us that the worker has been created correctly,
 			// then resolve the promise returned by the event listener.
 			this.trigger('resolve', meta);
-		} else if (callback) {
-			// The worker is sending data, call the callback this the event data.
-			callback(event.data);
+		} else if (fn) {
+			// The worker is sending data, call the fn this the event data.
+			fn(event.data);
 		} else {
 			// Receiving data from a worker created via 'open'.
 			this.trigger('resolve', meta, event.data);
