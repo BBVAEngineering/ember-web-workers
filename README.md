@@ -1,4 +1,5 @@
-# ember-web-workers 
+
+# ember-web-workers
 
 [![Build Status](https://circleci.com/gh/BBVAEngineering/ember-web-workers.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/BBVAEngineering/ember-web-workers)
 [![GitHub version](https://badge.fury.io/gh/BBVAEngineering%2Fember-web-workers.svg)](https://badge.fury.io/gh/BBVAEngineering%2Fember-web-workers)
@@ -61,7 +62,7 @@ returns a promise that will be resolved after the worker responses.
 
 When promise resolves the worker will be terminated.
 
-**Arguments**:  
+**Arguments**:
 
   * `worker`: the name of the worker to create (used to create the file path `dist/assets/web-workers/${name}.js`).
   * `data`: transferable object (`true` will be ignored, def. for ping).
@@ -81,12 +82,12 @@ When promise resolves the worker will be terminated.
 
 #### `terminate`
 
-Using this method a pending promise can be cancelled, this will terminate the worker 
+Using this method a pending promise can be cancelled, this will terminate the worker
 associated and the promise will be rejected.
 
 If promise is not provided, it will kill all the active workers.
 
-**Arguments**:  
+**Arguments**:
 
   * `promise`: the promise returned by the `send` function (optional).
 
@@ -96,7 +97,7 @@ If promise is not provided, it will kill all the active workers.
   foo() {
     const worker = this.get('worker');
     const promise = worker.postMessage('test', { foo: 'bar' });
-    
+
     worker.terminate(promise);
   }
 }
@@ -107,7 +108,7 @@ If promise is not provided, it will kill all the active workers.
 Methods used to subscribe to a worker events.
 The worker will be alive until the event is detached.
 
-**Arguments**:  
+**Arguments**:
 
   * `worker`: the name of the worker to create (used to create the file path `dist/assets/web-workers/${name}.js`).
   * `callback`: callback to be executed each time worker sends a message (`postMessage`). `callback` is optional for `off` method.
@@ -143,11 +144,11 @@ function callback(data) {
 This method creates a new worker and stablish a communication allowing to keep it alive
 to send `1..n` messages until terminates.
 
-**Arguments**:  
+**Arguments**:
 
   * `worker`: the name of the worker to create (used to create the file path `dist/assets/web-workers/${name}.js`).
 
-**Promise argument** (object):  
+**Promise argument** (object):
 
   * `postMessage`: Alias to send a message to the worker.
   * `terminate`: Close the connection and terminate the worker
@@ -162,7 +163,7 @@ to send `1..n` messages until terminates.
     return worker.open('test').then((stream) => {
         const data1 = stream.send({ foo: 'foo' });
         const data2 = stream.send({ bar: 'bar' });
-        
+
         // Wait responses.
         return Ember.RSVP.all([data1, data2]).then(() => {
           // Kill the worker.
