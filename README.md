@@ -20,10 +20,6 @@ This addon can be installed with `ember-cli`:
 
 ![ember-web-workers](http://i.imgur.com/93lfb8t.gif)
 
-## Information
-
-[![NPM](https://nodei.co/npm/ember-web-workers.png?downloads=true&downloadRank=true)](https://nodei.co/npm/ember-web-workers/)
-
 ## Usage
 
 * Create the web worker file in `public` (follow this blueprint):
