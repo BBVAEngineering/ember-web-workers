@@ -1,6 +1,6 @@
 {
   "name": "ember-web-workers",
-  "version": "0.1.0",
+  "version": "0.0.2",
   "description": "Service to communicate your application with browser web workers",
   "keywords": [
     "ember-addon",
