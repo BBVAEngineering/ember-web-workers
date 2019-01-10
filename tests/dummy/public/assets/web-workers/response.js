@@ -1,5 +1,5 @@
-self.addEventListener('message', function(e) {
-  postMessage(e.data);
+self.addEventListener('message', (e) => {
+	postMessage(e.data);
 }, false);
 
 postMessage(true);
