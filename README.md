@@ -1,10 +1,16 @@
-
 # ember-web-workers
 
-[![Build Status](https://circleci.com/gh/BBVAEngineering/ember-web-workers.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/BBVAEngineering/ember-web-workers)
+[![Build Status](https://travis-ci.org/BBVAEngineering/ember-web-workers.svg?branch=master)](https://travis-ci.org/BBVAEngineering/ember-web-workers)
 [![GitHub version](https://badge.fury.io/gh/BBVAEngineering%2Fember-web-workers.svg)](https://badge.fury.io/gh/BBVAEngineering%2Fember-web-workers)
-[![npm version](https://badge.fury.io/js/ember-storages.svg)](https://badge.fury.io/js/ember-web-workers)
-[![Dependency Status](https://david-dm.org/BBVAEngineering/ember-web-workers.svg)](https://david-dm.org/BBVAEngineering/ember-wait-for-render)
+[![NPM version](https://badge.fury.io/js/ember-web-workers.svg)](https://badge.fury.io/js/ember-web-workers)
+[![Dependency Status](https://david-dm.org/BBVAEngineering/ember-web-workers.svg)](https://david-dm.org/BBVAEngineering/ember-web-workers)
+[![codecov](https://codecov.io/gh/BBVAEngineering/ember-web-workers/branch/master/graph/badge.svg)](https://codecov.io/gh/BBVAEngineering/ember-web-workers)
+[![Greenkeeper badge](https://badges.greenkeeper.io/BBVAEngineering/ember-web-workers.svg)](https://greenkeeper.io/)
+[![Ember Observer Score](https://emberobserver.com/badges/ember-web-workers.svg)](https://emberobserver.com/addons/ember-web-workers)
+
+## Information
+
+[![NPM](https://nodei.co/npm/ember-web-workers.png?downloads=true&downloadRank=true)](https://nodei.co/npm/ember-web-workers/)
 
 Service to communicate your application with browser web workers.
 
