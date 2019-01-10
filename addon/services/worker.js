@@ -1,6 +1,10 @@
-import Ember from 'ember';
-
-const { get, assert, A, RSVP, Evented, computed, Service, on, isPresent } = Ember;
+import { assert } from '@ember/debug';
+import { A } from '@ember/array';
+import RSVP from 'rsvp';
+import { computed, get } from '@ember/object';
+import Service from '@ember/service';
+import Evented, { on } from '@ember/object/evented';
+import { isPresent } from '@ember/utils';
 
 function messageListener(meta, event) {
 	const ping = event.data === true;
