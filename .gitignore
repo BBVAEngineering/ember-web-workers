@@ -1,43 +1,16 @@
 # compiled output
-/dist/
-/tmp/
+/dist
+/tmp
 
 # dependencies
-/bower_components/
-/node_modules/
+/node_modules
+/bower_components
 
 # misc
-/.env*
 /.sass-cache
 /connect.lock
-/coverage/
+/coverage/*
 /libpeerconnection.log
-<<<<<<< HEAD
 npm-debug.log*
 testem.log
-||||||| parent of a330f96... message
-npm-debug.log*
-yarn-error.log
-testem.log
-=======
-/npm-debug.log*
-/testem.log
-/yarn-error.log
->>>>>>> a330f96... message
-
-<<<<<<< HEAD
-#ember-try
- .node_modules.ember-try/
- bower.json.ember-try
- package.json.ember-try
-||||||| parent of a330f96... message
-# ember-try
-.node_modules.ember-try/
-bower.json.ember-try
-package.json.ember-try
-=======
-# ember-try
-/.node_modules.ember-try/
-/bower.json.ember-try
-/package.json.ember-try
->>>>>>> a330f96... message
+tags*
