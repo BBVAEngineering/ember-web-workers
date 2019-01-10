@@ -26,7 +26,7 @@
     "start": "ember server",
     "test": "COVERAGE=true ember test",
     "test:all": "ember try:each",
-    "check-coverage": "istanbul check-coverage coverage/coverage-final.json --statements 100 --functions 100 --branches 100 --lines 100",
+    "check-coverage": "istanbul check-coverage coverage/coverage-final.json --statements 95 --functions 100 --branches 80 --lines 95",
     "commit": "git-cz",
     "posttest": "npm run report-coverage && npm run check-coverage",
     "report-coverage": "istanbul report --include=coverage/coverage-final.json text",
