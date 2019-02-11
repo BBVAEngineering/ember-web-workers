@@ -17,6 +17,10 @@ module('Unit | Service | worker', (hooks) => {
 		service = this.owner.factoryFor('service:worker').create({
 			webWorkersPath: '../assets/web-workers/'
 		});
+
+		// On chrome 72, web workers propagates errors to next layer: window.
+		// https://www.chromestatus.com/feature/6220798104698880
+		window.onerror = () => {};
 	});
 
 	hooks.afterEach(() => {
