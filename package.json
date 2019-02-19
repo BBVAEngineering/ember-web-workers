@@ -33,7 +33,7 @@
     "semantic-release": "semantic-release"
   },
   "dependencies": {
-    "ember-cli-babel": "^7.1.2"
+    "ember-cli-babel": "^7.4.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^7.5.1",
