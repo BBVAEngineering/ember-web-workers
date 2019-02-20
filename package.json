@@ -28,8 +28,9 @@
     "test:all": "ember try:each",
     "check-coverage": "istanbul check-coverage coverage/coverage-final.json --statements 95 --functions 100 --branches 80 --lines 95",
     "commit": "git-cz",
-    "posttest": "npm run report-coverage && npm run check-coverage",
+    "posttest": "npm run report-coverage && npm run check-coverage && npm run validate-coverage",
     "report-coverage": "istanbul report --include=coverage/coverage-final.json text",
+    "validate-coverage": "test \"$(cat coverage/coverage-summary.json | json total.lines.total)\" -gt 0",
     "semantic-release": "semantic-release"
   },
   "dependencies": {
@@ -68,6 +69,7 @@
     "eslint-plugin-node": "^8.0.1",
     "husky": "^1.3.1",
     "istanbul": "^0.4.5",
+    "json": "^9.0.6",
     "loader.js": "^4.7.0",
     "qunit-dom": "^0.8.0",
     "semantic-release": "^15.13.2"
