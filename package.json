@@ -42,7 +42,7 @@
     "@ember/optional-features": "^0.7.0",
     "@semantic-release/changelog": "^3.0.2",
     "@semantic-release/git": "^7.0.8",
-    "commitizen": "^3.0.5",
+    "commitizen": "^4.0.0",
     "cz-conventional-changelog": "^2.1.0",
     "ember-cli": "^3.7.1",
     "ember-cli-code-coverage": "^1.0.0-beta.8",
