@@ -2,7 +2,7 @@ import { assert } from '@ember/debug';
 import { A } from '@ember/array';
 import RSVP from 'rsvp';
 import { computed, get } from '@ember/object';
-import Service from '@ember/service';
+import Service, { inject as service } from '@ember/service';
 import Evented, { on } from '@ember/object/evented';
 import { isPresent } from '@ember/utils';
 
@@ -39,6 +39,8 @@ function errorListener(meta, error) {
 }
 
 export default Service.extend(Evented, {
+
+	assetMap: service('asset-map'),
 
 	/**
 	 * Check if workers are enabled.
@@ -79,7 +81,8 @@ export default Service.extend(Evented, {
 		assert('You must provide the worker name', isPresent(name));
 
 		// 'keepAlive' will store if the worker should still alive after sending a message.
-		const worker = new window.Worker(`${this.get('webWorkersPath')}${name}.js`);
+		const workerUrl = this.get('assetMap').resolve(`${this.get('webWorkersPath')}${name}.js`);
+		const worker = new window.Worker(workerUrl);
 		const deferred = RSVP.defer('Worker: sending message');
 		const meta = {
 			keepAlive,
