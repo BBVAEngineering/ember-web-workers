@@ -26,7 +26,7 @@
     "start": "ember server",
     "test": "COVERAGE=true ember test",
     "test:all": "ember try:each",
-    "check-coverage": "istanbul check-coverage coverage/coverage-final.json --statements 100 --functions 100 --branches 100 --lines 100",
+    "check-coverage": "istanbul check-coverage coverage/coverage-final.json --statements 97 --branches 82 --functions 100 --lines 97",
     "commit": "git-cz",
     "posttest": "npm run report-coverage && npm run check-coverage && npm run validate-coverage",
     "report-coverage": "istanbul report --include=coverage/coverage-final.json text",
@@ -51,7 +51,6 @@
     "ember-cli-code-coverage": "^1.0.0-beta.9",
     "ember-cli-dependency-checker": "^3.2.0",
     "ember-cli-htmlbars": "^4.2.3",
-    "ember-cli-htmlbars-inline-precompile": "^3.0.1",
     "ember-cli-inject-live-reload": "^2.0.2",
     "ember-cli-qunit-parameterize": "^1.0.1",
     "ember-cli-uglify": "^3.0.0",
@@ -79,7 +78,7 @@
     "semantic-release": "^17.0.4"
   },
   "engines": {
-    "node": "6.* || 8.* || >= 10.*"
+    "node": "10.* || >= 12"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"

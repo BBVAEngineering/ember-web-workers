@@ -1,7 +1,7 @@
 import { assert } from '@ember/debug';
 import { A } from '@ember/array';
 import RSVP from 'rsvp';
-import { computed, get } from '@ember/object';
+import { get } from '@ember/object';
 import Service, { inject as service } from '@ember/service';
 import Evented, { on } from '@ember/object/evented';
 import { isPresent } from '@ember/utils';
@@ -48,7 +48,9 @@ export default Service.extend(Evented, {
 	 * @property isEnabled
 	 * @type Boolean
 	 */
-	isEnabled: computed(() => Boolean(window.Worker)),
+	get isEnabled() {
+		return Boolean(window.Worker);
+	},
 
 	/**
 	   * Static workers file path.
@@ -226,6 +228,7 @@ export default Service.extend(Evented, {
 
 		if (metaArray.length) {
 			metaArray.forEach((meta) => this._cleanMeta(meta));
+
 			return RSVP.resolve();
 		}
 
@@ -252,6 +255,7 @@ export default Service.extend(Evented, {
 			},
 			terminate: () => {
 				this._cleanMeta(meta);
+
 				return RSVP.resolve();
 			}
 		}));
