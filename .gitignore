@@ -1,23 +1,27 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
 # compiled output
-/dist
-/tmp
+/dist/
+/tmp/
 
 # dependencies
-/node_modules
-/bower_components
+/bower_components/
+/node_modules/
 
 # misc
-<<<<<<< HEAD
-||||||| parent of 27e5d89... v3.7.1...v3.17.0
-/.env*
-=======
 /.env*
 /.pnp*
->>>>>>> 27e5d89... v3.7.1...v3.17.0
 /.sass-cache
 /connect.lock
-/coverage/*
+/coverage/
 /libpeerconnection.log
-npm-debug.log*
-testem.log
-tags*
+/npm-debug.log*
+/testem.log
+/yarn-error.log
+/tags*
+/.nyc_output
+
+# ember-try
+/.node_modules.ember-try/
+/bower.json.ember-try
+/package.json.ember-try

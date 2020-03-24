@@ -1,20 +1,9 @@
-<<<<<<< HEAD
-||||||| parent of 27e5d89... v3.7.1...v3.17.0
 # EditorConfig helps developers define and maintain consistent
 # coding styles between different editors and IDEs
 # editorconfig.org
 
 root = true
 
-
-=======
-# EditorConfig helps developers define and maintain consistent
-# coding styles between different editors and IDEs
-# editorconfig.org
-
-root = true
-
->>>>>>> 27e5d89... v3.7.1...v3.17.0
 [*]
 end_of_line = lf
 charset = utf-8
@@ -28,8 +17,8 @@ indent_style = tab
 indent_size = tab
 tab_width = 4
 
-[*.hbs]
+[*.{hbs,yml,yaml}]
 insert_final_newline = false
 
-[*.md]
+[*.{diff,md}]
 trim_trailing_whitespace = false
