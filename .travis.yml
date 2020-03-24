@@ -1,7 +1,7 @@
 ---
 language: node_js
+os: linux
 node_js: stable
-sudo: false
 dist: trusty
 
 addons:
@@ -16,9 +16,9 @@ env:
     - JOBS=1
 
 jobs:
-  fail_fast: true
   allow_failures:
     - env: EMBER_TRY_SCENARIO=ember-canary
+    - env: EMBER_TRY_SCENARIO=ember-beta
 
   include:
     - stage: "Tests"
@@ -38,28 +38,27 @@ jobs:
         - npm run lint:js
         - npm run lint:hbs
         - npm test
+        - npx semantic-release --dry-run --branches=$TRAVIS_BRANCH
       after_script:
         - greenkeeper-lockfile-upload
       after_success:
         - codecov --file=coverage/lcov.info
 
     - stage: "Regression Tests"
-      env: EMBER_TRY_SCENARIO=ember-lts-2.18
-    - env: EMBER_TRY_SCENARIO=ember-lts-3.4
+      env: EMBER_TRY_SCENARIO=ember-lts-3.12
+    - env: EMBER_TRY_SCENARIO=ember-lts-3.16
     - env: EMBER_TRY_SCENARIO=ember-release
     - env: EMBER_TRY_SCENARIO=ember-beta
     - env: EMBER_TRY_SCENARIO=ember-canary
     - env: EMBER_TRY_SCENARIO=ember-default-with-jquery
+    - env: EMBER_TRY_SCENARIO=ember-classic
 
     - stage: "Release"
       script: skip
       deploy:
         provider: script
         skip_cleanup: true
-        before_script:
-          - npm uninstall husky
-        script:
-          - npx semantic-release
+        script: npx semantic-release
 
 before_install:
   - npm config set spin false
@@ -74,4 +73,3 @@ stages:
   - "Regression Tests"
   - name: "Release"
     if: branch = master
-
