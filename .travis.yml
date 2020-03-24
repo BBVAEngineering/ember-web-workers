@@ -1,7 +1,22 @@
 ---
 language: node_js
+<<<<<<< HEAD
 node_js: stable
 sudo: false
+||||||| parent of 27e5d89... v3.7.1...v3.17.0
+node_js:
+  # we recommend testing addons with the same minimum supported node version as Ember CLI
+  # so that your addon works for all apps
+  - "6"
+
+sudo: false
+=======
+node_js:
+  # we recommend testing addons with the same minimum supported node version as Ember CLI
+  # so that your addon works for all apps
+  - "10"
+
+>>>>>>> 27e5d89... v3.7.1...v3.17.0
 dist: trusty
 
 addons:
@@ -16,11 +31,18 @@ env:
     - JOBS=1
 
 jobs:
-  fail_fast: true
+  fast_finish: true
   allow_failures:
     - env: EMBER_TRY_SCENARIO=ember-canary
 
   include:
+<<<<<<< HEAD
+||||||| parent of 27e5d89... v3.7.1...v3.17.0
+    # runs linting and tests with current locked deps
+
+=======
+    # runs linting and tests with current locked deps
+>>>>>>> 27e5d89... v3.7.1...v3.17.0
     - stage: "Tests"
       before_install:
         - npm config set spin false
@@ -34,6 +56,7 @@ jobs:
       before_script:
         - greenkeeper-lockfile-update
       script:
+<<<<<<< HEAD
         - commitlint-travis
         - npm run lint:js
         - npm run lint:hbs
@@ -42,14 +65,43 @@ jobs:
         - greenkeeper-lockfile-upload
       after_success:
         - codecov --file=coverage/lcov.info
+||||||| parent of 27e5d89... v3.7.1...v3.17.0
+        - npm run lint:hbs
+        - npm run lint:js
+        - npm test
+=======
+        - npm run lint
+        - npm run test:ember
 
+    - stage: "Additional Tests"
+      name: "Floating Dependencies"
+      install:
+        - npm install --no-package-lock
+      script:
+        - npm run test:ember
+>>>>>>> 27e5d89... v3.7.1...v3.17.0
+
+<<<<<<< HEAD
     - stage: "Regression Tests"
       env: EMBER_TRY_SCENARIO=ember-lts-2.18
     - env: EMBER_TRY_SCENARIO=ember-lts-3.4
+||||||| parent of 27e5d89... v3.7.1...v3.17.0
+    # we recommend new addons test the current and previous LTS
+    # as well as latest stable release (bonus points to beta/canary)
+    - stage: "Additional Tests"
+      env: EMBER_TRY_SCENARIO=ember-lts-2.18
+    - env: EMBER_TRY_SCENARIO=ember-lts-3.4
+=======
+    # we recommend new addons test the current and previous LTS
+    # as well as latest stable release (bonus points to beta/canary)
+    - env: EMBER_TRY_SCENARIO=ember-lts-3.12
+    - env: EMBER_TRY_SCENARIO=ember-lts-3.16
+>>>>>>> 27e5d89... v3.7.1...v3.17.0
     - env: EMBER_TRY_SCENARIO=ember-release
     - env: EMBER_TRY_SCENARIO=ember-beta
     - env: EMBER_TRY_SCENARIO=ember-canary
     - env: EMBER_TRY_SCENARIO=ember-default-with-jquery
+<<<<<<< HEAD
 
     - stage: "Release"
       script: skip
@@ -65,6 +117,15 @@ before_install:
   - npm config set spin false
   - npm install -g npm@6
   - npm --version
+||||||| parent of 27e5d89... v3.7.1...v3.17.0
+
+before_install:
+  - npm config set spin false
+  - npm install -g npm@4
+  - npm --version
+=======
+    - env: EMBER_TRY_SCENARIO=ember-classic
+>>>>>>> 27e5d89... v3.7.1...v3.17.0
 
 script:
   - node_modules/.bin/ember try:one $EMBER_TRY_SCENARIO

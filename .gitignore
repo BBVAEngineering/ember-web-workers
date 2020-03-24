@@ -7,6 +7,13 @@
 /bower_components
 
 # misc
+<<<<<<< HEAD
+||||||| parent of 27e5d89... v3.7.1...v3.17.0
+/.env*
+=======
+/.env*
+/.pnp*
+>>>>>>> 27e5d89... v3.7.1...v3.17.0
 /.sass-cache
 /connect.lock
 /coverage/*

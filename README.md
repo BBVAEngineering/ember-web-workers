@@ -14,6 +14,10 @@
 
 Service to communicate your application with browser web workers.
 
+* Ember.js v3.12 or above
+* Ember CLI v2.13 or above
+* Node.js v10 or above
+
 This addon can be installed with `ember-cli`:
 
 * `ember install ember-web-workers`
@@ -218,6 +222,13 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 See the list of [contributors](https://github.com/BBVAEngineering/ember-wait-for-render/graphs/contributors) who participated in this project.
 
-## License
+Contributing
+------------------------------------------------------------------------------
+
+See the [Contributing](CONTRIBUTING.md) guide for details.
+
+
+License
+------------------------------------------------------------------------------
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
